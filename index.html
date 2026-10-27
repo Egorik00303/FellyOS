@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FellyOS | Система в EXE</title>
+    <style>
+        /* Базовые настройки рабочего стола Windows 7 */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            /* Легендарный фон: капли дождя на стекле */
+            background: url('https://img2.akspic.ru/crops/5/8/4/8/4/148485/148485-voda-dozhd-sinij-nebo-surface-3840x2160.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #ffffff;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* 🌟 ЭКРАН 1: КРАСИВОЕ ПРИВЕТСТВИЕ (СЕРОЕ ОКНО + КАПЛИ) */
+        .welcome-screen {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: rgba(15, 23, 42, 0.4); /* Притемняем капли на фоне */
+            backdrop-filter: blur(4px);
+        }
+
+        /* ТЁМНО-СЕРОЕ СТЕКЛЯННОЕ ОКНО ПРИВЕТСТВИЯ AERO GLASS */
+        .aero-welcome-window {
+            background: linear-gradient(135deg, rgba(40, 44, 52, 0.65) 0%, rgba(20, 24, 30, 0.8) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-top: 1px solid rgba(255, 255, 255, 0.45);
+            border-left: 1px solid rgba(255, 255, 255, 0.45);
+            border-radius: 24px;
+            padding: 50px 60px;
+            backdrop-filter: blur(20px); /* Мощное размытие капель под окном */
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.8), 
+                        inset 0 1px 3px rgba(255, 255, 255, 0.4),
+                        0 0 30px rgba(0, 153, 255, 0.1);
+            animation: windowInit 1.2s cubic-bezier(0.1, 0.8, 0.2, 1);
+        }
+
+        .win7-logo-box span {
+            font-size: 64px;
+            font-weight: 600;
+            letter-spacing: -2px;
+            background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+        }
+
+        .welcome-text {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 400;
+            margin: 15px 0 40px 0;
+            letter-spacing: 0.5px;
+        }
+
+        /* Знаменитая глянцевая кнопка Windows 7 Aero */
+        .aero-btn {
+            display: inline-block;
+            padding: 14px 45px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.08) 50%, rgba(0,0,0,0.25) 50%, rgba(255,255,255,0.08) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            border-radius: 30px;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            letter-spacing: 1px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.4);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .aero-btn:hover {
+            background: linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.15) 50%, rgba(0,102,255,0.25) 50%, rgba(255,255,255,0.15) 100%);
+            border-color: rgba(0, 153, 255, 0.8);
+            box-shadow: 0 0 25px rgba(0, 153, 255, 0.6), inset 0 1px 0 rgba(255,255,255,0.5);
+            transform: scale(1.02);
+        }
+
+        /* 🌟 ЭКРАН 2: ВЕРСИИ ДЛЯ СКАЧИВАНИЯ */
+        .versions-screen {
+            min-height: 100vh;
+            background: linear-gradient(180deg, rgba(15,23,42,0.6) 0%, rgba(5,5,10,0.95) 100%);
+            padding: 80px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(6px);
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 400;
+            margin-bottom: 60px;
+            text-shadow: 0 0 20px rgba(255,255,255,0.3);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .grid-container {
+            display: flex;
+            gap: 35px;
+            width: 100%;
+            max-width: 1200px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* 💎 СТЕКЛЯННЫЕ КАРТОЧКИ ВЕРСИЙ AERO GLASS 💎 */
+        .aero-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-top: 1px solid rgba(255, 255, 255, 0.45);
+            border-left: 1px solid rgba(255, 255, 255, 0.45);
+            border-radius: 20px;
+            padding: 35px 30px;
+            width: 300px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.2);
+            text-align: center;
+            transition: transform 0.3s cubic-bezier(0.1, 0.8, 0.2, 1), box-shadow 0.3s ease;
+        }
+
+        .aero-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 35px 60px rgba(0,0,0,0.7), 0 0 30px rgba(0, 255, 102, 0.2);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.06) 100%);
+        }
+
+        .version-tag {
+            font-size: 12px;
+            font-weight: 700;
+            color: #00ffcc;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .card-title {
+            font-size: 24px;
+            margin: 0 0 18px 0;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .card-desc {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.75);
+            line-height: 1.6;
+            margin-bottom: 35px;
+            height: 75px;
+        }
+
+        /* Аккуратная Aero-кнопка скачивания */
+        .card-download-btn {
+            display: inline-block;
+            width: 85%;
+            padding: 12px 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.25) 100%);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .card-download-btn:hover {
+            background: #00ff66;
+            color: #000000;
+            border-color: #00ff66;
+            box-shadow: 0 0 20px rgba(0, 255, 102, 0.7);
+            text-shadow: none;
+        }
+
+        /* Плавная анимация всплытия серого окна */
+        @keyframes windowInit {
+            from { opacity: 0; transform: scale(0.92) translateY(30px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .signature {
+            margin-top: 60px;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.35);
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 🌟 ЭКРАН 1: СЕРОЕ ОКНО ПРИВЕТСТВИЯ + КАПЛИ НА ФОНЕ -->
+    <div class="welcome-screen">
+        <div class="aero-welcome-window">
+            <div class="win7-logo-box">
+                <span>FellyOS</span>
+            </div>
+            <div class="welcome-text">Спасибо за использование систем FellyOS!</div>
+            <a href="#versions" class="aero-btn">ОТКРЫТЬ РЕДАКЦИИ</a>
+        </div>
+    </div>
+
+    <!-- 🌟 ЭКРАН 2: ЛИНЕЙКА ИЗ 3 РЕДАКЦИЙ ДЛЯ СКАЧИВАНИЯ -->
+    <div class="versions-screen" id="versions">
+        <div class="section-title">Доступные дистрибутивы</div>
+        
+        <div class="grid-container">
+            
+            <!-- ВЕРСИЯ 1: CLASSIC -->
+            <div class="aero-card">
+                <div class="version-tag">BETA 0.0.1</div>
+                <div class="card-title">Classic Edition</div>
+                <div class="card-desc">Архитектура Visual Studio. Исторический первый билд ядра системы. САМАЯ ПЕРВАЯ версия которая была разработанна.</div>
+                <a href="https://github.com/Egorik00303/FellyOS/raw/refs/heads/main/BETA%200.0.1/FellyOS.exe" class="card-download-btn" target="_blank">СКАЧАТЬ (.EXE)</a>
+            </div>
+
+            <!-- ВЕРСИЯ 2: BUTTERFLY 🦋 -->
+            <div class="aero-card" style="border-color: rgba(0, 255, 102, 0.35);">
+                <div class="version-tag" style="color: #00ff66;">BETA 0.0.4</div>
+                <div class="card-title">Butterfly 🦋</div>
+                <div class="card-desc">Архитектура VS Code + CMake. Встроена сетевая команда ping, вечный файл паролей и скрытый бэкдор админа.</div>
+                <a href="nety" class="card-download-btn" target="_blank">БИЛД В ДАННЫЙ МОМЕНТ НЕ ВЫЛОЖЕН!</a>
+            </div>
+
+            <!-- ВЕРСИЯ 3: MATRIX TRAP 🚨 -->
+            <div class="aero-card" style="border-color: rgba(255, 0, 50, 0.35);">
+                <div class="version-tag" style="color: #ff0032;">GitHub</div>
+                <div class="card-title">Github</div>
+                <div class="card-desc">Ссылка на весь репозиторий!</div>
+                <a href="https://github.com/Egorik00303/FellyOS" class="card-download-btn" target="_blank">ЗАЙТИ</a>
+            </div>
+
+        </div>
+
+        <div class="signature">
+            РАЗРАБОТАННО ЧЕЛОВЕКОМ ПОД ПСЕВДОНИМОМ NSEYIL
+        </div>
+    </div>
+
+</body>
+</html>
