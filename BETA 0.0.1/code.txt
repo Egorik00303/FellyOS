@@ -1,0 +1,86 @@
+#include <iostream>
+#include <string>
+
+int main() {
+    setlocale(LC_ALL, "ru");
+    std::string cmd;
+    std::string user;
+    std::string open;
+    long long num1;
+    char chena;
+    long long num2;
+    std::cout << "SYSTEM:\\> Enter your user\n\n";
+    std::cin >> user;
+    std::cout << "==================================================\n";
+    std::cout << "       FellyOS [BETA 0.0.1]    \n";
+    std::cout << "       User: " << user << std::endl;
+    std::cout << "==================================================\n\n";
+    std::cout << "Enter 'help' to display a table of the available utility.\n" << std::endl;
+
+    while (true) {
+        std::cout << "FellyOS:\\> ";
+        std::cin >> cmd;
+
+        if (cmd == "clear") {
+            system("cls");
+        }
+        else if (cmd == "help") {
+            std::cout << "==================================================\n";
+            std::cout << "       FellyOS [BETA 0.0.1]    \n";
+            std::cout << "       User: " << user << std::endl;
+            std::cout << "       Clear cmd: clear" << std::endl;
+            std::cout << "       Open file: op" << std::endl;
+            std::cout << "       Calculator: calc" << std::endl;
+            std::cout << "       Time: time" << std::endl;
+            std::cout << "==================================================\n\n";
+        }
+        else if (cmd == "op") {
+            std::cout << "Enter the FULL path to the file:\n";
+
+            // 1. Очищаем буфер от остатков нажатия Enter после ввода самой команды "op"
+            std::cin.ignore();
+
+            // 2. Считываем ВЕСЬ путь целиком за один раз!
+            std::getline(std::cin, open);
+
+            // 3. Конвертируем строку и запускаем файл в Windows
+            system(open.c_str());
+            // жалко что ии сделала за меня ну ладно
+        }
+        else if (cmd == "calc") {
+            std::cout << "Enter the first number\n";
+            std::cin >> num1;
+            std::cout << "Enter a symbol like +, -, /, *\n";
+            std::cin >> chena;
+            std::cout << "Enter the second number\n";
+            std::cin >> num2;
+            if (chena == '+') {
+                system("cls");
+                std::cout << num1 + num2 << std::endl;
+            }
+            else if (chena == '-') {
+                system("cls");
+                std::cout << num1 - num2 << std::endl;
+            }
+            else if (chena == '/') {
+                system("cls");
+                std::cout << num1 / num2 << std::endl;
+            }
+            else if (chena == '*') {
+                system("cls");
+                std::cout << num1 * num2 << std::endl;
+            }
+            
+        }
+        else if (cmd == "time") {
+            std::cout << "At this very moment ";
+            system("time /t");
+        }
+        else {
+            std::cout << "Command not found!\n\n";
+        }
+    }
+
+
+	return 0;
+}
